@@ -1,24 +1,35 @@
 //gameSetup
     //settings:         you could get user input to change these
-    //colorScheme =
+    colorScheme =
     [`style="color:White; background-color:Purple;"`, `style="background-color:lightGreen;"`, `style="background-color:DodgerBlue;"`,
     `style="background-color:White;"`,
     `style="background-color:Orange;"`, `style="background-color:Red;"`, `style="color:Black; background-color:Yellow;"`, `style="color:White; background-color:Gray;"`];
-
+    var level = 1;      //starting level
+    const scale = 50;
+    document.getElementById("gameGrid").setAttribute("viewbox","0 0 100 100");
+    document.getElementById("gameGrid").viewbox = "0 0 100 100";
+    document.getElementById("gameGrid").innerHTML += `viewBox="0 0 100 100"`;
+    var renderDistance = 10;
     //initialize game
     var score = 0;
-    const validKeys = ["A","S","D"];
-    var level = 1;
+    const validKeys = ["Q","W","E","A","S","D"];
+    var playerCoords = [];
+    //coordinates are +=1,0 and +-.5, +-hex
+    const hex = Math.sqrt(3)/3;
 
-function levelSetup(unscaledWidth, unscaledHeight){
-    printGrid();
-    shiftTimer=Date.now()+(1000*level/20);
-    keypressed = null;
-    //window.score = 0;
-    score = 0; 
-    completedRows = [];
-}
+class HexSquare {
+    constructor(color, coords, playerCoords) {
+        this.color = color;
+        this.coords = coords;
+        if(playerCoords.length()+renderDistance+1>coords.length){
+            //make a new HexSquare... how does recursion work with constructors?
+        }
+        }
+    
+    }
+
 function makeGrid(width, height){
+    gameCoords = [];
     gameGrid = [];
     emptyRow = [];
     for(var i=0;i<width;i++){
@@ -30,20 +41,19 @@ function makeGrid(width, height){
     print("grid made");
 }
 function print(printText){
-    document.getElementById("gameDisplay").innerHTML += printText;
+    document.getElementById("textDisplay").innerHTML += printText;
 }
 function printGrid(){
-    document.getElementById("gameDisplay").innerHTML = "<br>";
+    
     gameGrid.forEach(element => {
-        print(`<t text-align="justify">`);
-        element.forEach(element => {
-            print(`<t `+colorScheme[periodicTable[element]+3]+`>`+(element.length==emptySpaceCharacter.length ? element : element+emptySpaceCharacter[0])+`</t>`+spacerCharacter);
-        });
-        print("</t><br>");
+        document.getElementById("gameGrid").innerHTML += `<polygon points="100,100 150,25 150,75 200,0" fill="none" stroke="black" />`; 
     });
     print("score: "+score+`<br>`);
-    print("completed: "+completedRows);
-    //print("faller is at "+fallerCoords+"<br>");
+}
+function levelSetup(unscaledWidth, unscaledHeight){
+    makeGrid();
+    printGrid();
+    shiftTimer=Date.now()+(1000*level/20);
 }
 function shiftFaller(direction){
     //document.getElementById("gameDisplay").innerHTML += "shifting: "+direction;
