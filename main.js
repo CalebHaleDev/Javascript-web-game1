@@ -12,6 +12,7 @@
     var score = 0;
     const validKeys = ["Q","W","E","A","S","D"];
     var playerCoords = [];
+    var playerDirection = 1;
     const playerSize = 1;
     var lightPower = 5;
     const maxLightPower = 15;
@@ -46,21 +47,36 @@ function generateMap(){
 function print(printText){
     document.getElementById("textDisplay").innerHTML += printText;
 }
+function draw(drawing){
+    document.getElementById("gameGrid").innerHTML += drawing;
+}
 function coordToHex(){
     //takes coordinates and returns a set of hex directions
-}
-function hexToCoord(){
-    //takes a hex direction and returns coordinates, needed?
 }
 function HexPosition(){
     //this function cancels out movement, unless it is noneuclidean
 }
 function drawMap(){
+    document.getElementById("gameGrid").innerHTML = ""; 
+    draw(`<polygon points="0,0 50,25 5,100 0,25" fill="hsla(360, 34%, 45%, .9)" stroke="black" />`);   //test shape
     //for each grid space, lookup the player coordinates, plus the difference in movement, (processed in hexForm), to find the square
     //coordinates within render distance, coordToHex, draw them
+    hue = 36
+    draw(`<polygon points="-.5,${hex} .5,${hex} 1,0 .5,-${hex} -.5,-${hex} -1,0" fill="hsla(${hue}, 34%, 45%, ${lightPower/maxLightPower})" stroke="white" />`);
     gameMap.forEach(element => {
-        document.getElementById("gameGrid").innerHTML += `<polygon points="100,100 150,25 150,75 200,0" fill="none" stroke="black" />`; 
+        document.getElementById("gameGrid").innerHTML += `<polygon points="-.5,${hex} .5,${hex} 1,0 .5,-${hex} -.5,-${hex} -1,0" fill="hsla(${hue}, 34%, 45%, ${lightPower/maxLightPower})" stroke="black" />`; 
     });
+    //the above would render the whole world, instead:
+    for(var i = -renderDistance; i<renderDistance; i++){
+        for(var j = -renderDistance; j<renderDistance; j++){
+            //draw playerCoords + coordToHex() in their correct rotated positions
+            //unrotated drawing position would be:
+            //X = Math.Sqrt(3)*hex per upright=2 and per downright=3, reverse for reversed
+            //Y = 2*hex per up=1, hex per upright=2, -hex per downright=3, reverse for reversed
+
+            //so, relative to the player, all gridspots would be drawn X: (threes)-(-threes) + Math.Sqrt(3)*hex*((twos)-(-twos)) , Y: hex*[(twos)-(-twos)-(threes)+(-threes)] + 2*hex*((ones)-(-ones))
+        }
+    }
     print("score: "+score+`<br>`);
 }
 function levelSetup(){
@@ -69,7 +85,7 @@ function levelSetup(){
     shiftTimer=Date.now()+(1000*level/20);
 }
 function movePlayer(direction){
-    //print("moving: "+direction-name);
+    print("moving: "+direction);
     let newLocation = HexPosition(playerCoords + direction)
     if(newLocation==empty){
         playerCoords = newLocation;
