@@ -1,21 +1,24 @@
 //gameSetup
-    //settings:         you could get user input to change these
-    colorScheme =
-    [`style="color:White; background-color:Purple;"`, `style="background-color:lightGreen;"`, `style="background-color:DodgerBlue;"`,
-    `style="background-color:White;"`,
-    `style="background-color:Orange;"`, `style="background-color:Red;"`, `style="color:Black; background-color:Yellow;"`, `style="color:White; background-color:Gray;"`];
+    //settings:
+    //const randomGroundTexture = [" ",".",","];
     var level = 1;      //starting level
     const scale = 50;
     document.getElementById("gameGrid").setAttribute("viewbox","0 0 100 100");
     document.getElementById("gameGrid").viewbox = "0 0 100 100";
     document.getElementById("gameGrid").innerHTML += `viewBox="0 0 100 100"`;
-    var renderDistance = 10;
+    const renderDistance = 10;
+    const colorGradient = 5;
     //initialize game
     var score = 0;
     const validKeys = ["Q","W","E","A","S","D"];
     var playerCoords = [];
+    const playerSize = 1;
+    var lightPower = 5;
+    const maxLightPower = 15;
     //coordinates are +=1,0 and +-.5, +-hex
     const hex = Math.sqrt(3)/3;
+    mapCoords = [];
+    gameMap = [];
 
 class HexSquare {
     constructor(color, coords, playerCoords) {
@@ -28,44 +31,51 @@ class HexSquare {
     
     }
 
-function makeGrid(width, height){
-    gameCoords = [];
-    gameGrid = [];
-    emptyRow = [];
-    for(var i=0;i<width;i++){
-        emptyRow.push(emptySpaceCharacter);
-    }
-    for(var i=0;i<height;i++){
-        gameGrid.push(emptyRow.map(x => x));        //future research: how to dereference
-    }
+//generateMap for origin forward and backward, at least renderDistance
+function makeMap(coord, direction){
     print("grid made");
+    //if this grid doesn't exist, make a new one at this spot
+    //if this grid doesn't exist, recursively call the function from here;
+        //in the same direction from the parent drawing from the parent
+        //a little left from the parent drawing from the parent's left (if generated)
+        //and a little right from the parent, drawing from the parent's right (if generated)
+}
+function generateMap(){
+    //loop makeMap x times, for x steps/layers of recursive generation
 }
 function print(printText){
     document.getElementById("textDisplay").innerHTML += printText;
 }
-function printGrid(){
-    
-    gameGrid.forEach(element => {
+function coordToHex(){
+    //takes coordinates and returns a set of hex directions
+}
+function hexToCoord(){
+    //takes a hex direction and returns coordinates, needed?
+}
+function HexPosition(){
+    //this function cancels out movement, unless it is noneuclidean
+}
+function drawMap(){
+    //for each grid space, lookup the player coordinates, plus the difference in movement, (processed in hexForm), to find the square
+    //coordinates within render distance, coordToHex, draw them
+    gameMap.forEach(element => {
         document.getElementById("gameGrid").innerHTML += `<polygon points="100,100 150,25 150,75 200,0" fill="none" stroke="black" />`; 
     });
     print("score: "+score+`<br>`);
 }
-function levelSetup(unscaledWidth, unscaledHeight){
-    makeGrid();
-    printGrid();
+function levelSetup(){
+    generateMap();
+    drawMap();
     shiftTimer=Date.now()+(1000*level/20);
 }
-function shiftFaller(direction){
-    //document.getElementById("gameDisplay").innerHTML += "shifting: "+direction;
-    let newLocation = direction==0 ? [fallerCoords[0],fallerCoords[1]+1] : [fallerCoords[0]+direction,fallerCoords[1]];
-    if(gameGrid[newLocation[1]][newLocation[0]]==emptySpaceCharacter){  //if newLocation is open...
-        gameGrid[newLocation[1]][newLocation[0]] = gameGrid[fallerCoords[1]][fallerCoords[0]];  //set the newLocation to the faller
-        gameGrid[fallerCoords[1]][fallerCoords[0]] = emptySpaceCharacter;       //and set the faller to a blank space
-        fallerCoords = [newLocation[0],newLocation[1]];
-        if(direction==0) score++;
+function movePlayer(direction){
+    //print("moving: "+direction-name);
+    let newLocation = HexPosition(playerCoords + direction)
+    if(newLocation==empty){
+        playerCoords = newLocation;
     }
-    printGrid();
-    shiftTimer=Date.now()+Math.max(1000*(level/20),250); //only if shift successful?
+    drawMap();
+    shiftTimer=Date.now()+500;
 }
 
     levelSetup(1,5);
