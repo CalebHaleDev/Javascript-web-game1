@@ -33,7 +33,6 @@ class HexSquare {
     
 }
 
-    //print(Math.sin(3.14));
 //generateMap for origin forward and backward, at least renderDistance
 function makeMap(coord, direction){
     print("grid made");
@@ -52,7 +51,22 @@ function print(printText){
 function draw(drawing){
     document.getElementById("gameGrid").innerHTML += drawing;
 }
-function coordToHex(){
+function coordToHex(x, y){
+    result = [];
+    while(x*y<0){
+        result.push(3*Math.sign(x));    //adds diagonal hex for each diagonal coordinate
+        x--;
+        y++;
+    }
+    while(Math.abs(x)>0){
+        x -= Math.abs(x);
+        result.push(2*Math.sign(x));    //adds other diagonal hex for each diagonal coordinate
+    }
+    while(Math.abs(y)>0){
+        y -= Math.abs(y);
+        result.push(Math.sign(x));      //adds vertical hex for each vertical coordinate
+    }
+    return result;
     //takes coordinates and returns a set of hex directions
 }
 function HexPosition(){
@@ -68,6 +82,7 @@ function rotateDirection(direction, rotation = 1){
             direction = direction-Math.sign(direction)==0 ? -3*Math.sign(direction) : direction-Math.sign(direction);
         }
     }
+    return direction;
 }
 function drawMap(){
     document.getElementById("gameGrid").innerHTML = ""; 
