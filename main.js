@@ -72,30 +72,30 @@ function coordToHex(x, y){
     //takes coordinates and returns a set of hex directions
 }
 function HexPosition(coordinates){
+    //all movement within the last render distance which cancels itself out is removed (only render distance, to allow noneuclidean)
+    //negatives are their own complements, as well as 1, -2, 3 and -1, 2, -3
     checkCoords = coordinates.slice(-1*renderDistance,-1);
     checkCoords.push(coordinates[coordinates.length-1]);
     for(var i = 1; i<4; i++){
-        
+        //find first value w/ counterpart, find where it is, splice it, use the returned spliced value to find and splice it's counterpart
         while(checkCoords.includes(i)&&checkCoords.includes(-1*i)){
-            checkCoords.find((value) => checkCoords.includes(-1*value)); //find the first value with a counterpart
-            checkCoords.indexOf(value from above);  //find where that value is
-            checkCoords.splice(index,1)   //splice returns the value spliced, which will then be used to splice it's counterpart, removing both
-            checkCoords.splice(checkCoords.indexOf(-1*value),1); 
+            checkCoords.splice(checkCoords.indexOf(-1*checkCoords.splice(checkCoords.indexOf(checkCoords.find((value) => checkCoords.includes(-1*value))),1)),1); 
         }
-//similar to above, but must check for hexagonal diagonals
-        while(checkCoords.includes(i)&&checkCoords.includes(-1*i)){
-            checkCoords.find((value) => checkCoords.includes(-1*value)); //find the first value with a counterpart
-            checkCoords.indexOf(value from above);  //find where that value is
-            checkCoords.splice(index,1)   //splice returns the value spliced, which will then be used to splice it's counterpart, removing both
-            checkCoords.splice(checkCoords.indexOf(-1*value),1); 
-        }
-
     }
-    //this function cancels out movement, unless it is noneuclidean
-
-    //all movement within the last render distance which cancels itself out is removed
-    //negatives are their own complements, as well as 1, -2, 3 and -1, 2, -3 (three who sum to +-2 and all have different absolute values...)
-    return coordinates
+//similar to above, but must check for hexagonal diagonals
+//repeat until checkCoords.find() == undefined
+var cancellingPair = [checkCoords.find((value) => checkCoords.includes(value-(5*Math.sign(value)))&&checkCoords.includes(value-(3*Math.sign(value))))];
+//for a 2 or -2, if there is a 1 and 3 of opposite sign, by going the appopriate amount in the other direction on the number line for the value to check
+        while(cancellingPair[0]!=undefined){
+            cancellingPair.push = cancellingPair[0]-(5*Math.sign(value));   //add the opposite 3
+            cancellingPair.push = cancellingPair[0]-(3*Math.sign(value));   //add the opposite 1
+            for(var i=0; i<3; i++){     //remove the cancelling pair
+                checkCoords.splice(checkCoords.indexOf(cancellingPair[i]),1);
+            }
+        cancellingPair = [checkCoords.find((value) => checkCoords.includes(value-(5*Math.sign(value)))&&checkCoords.includes(value-(3*Math.sign(value))))];
+        }
+    resultArray = coordinates.slice(0, coordinates.length()-renderDistance);       //result=unchecked coordinates + checked
+    return resultArray.splice(resultArray.length,0, [...checkCoords]);        //double check this later
 }
 function rotateDirection(direction, rotation = 1){
     //positive rotation= change by sign, if abs>3, set to opposite sign 1
