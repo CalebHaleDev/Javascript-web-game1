@@ -16,6 +16,7 @@
     const playerSize = 1;
     var lightPower = 5;
     const maxLightPower = 15;
+    //const pi = 3.14159265     //for possible use in shortening the rotateDirection function
     //coordinates are +=1,0 and +-.5, +-hex
     const hex = Math.sqrt(3)/3;
     mapCoords = [];
@@ -27,11 +28,12 @@ class HexSquare {
         this.coords = coords;
         if(playerCoords.length()+renderDistance+1>coords.length){
             //make a new HexSquare... how does recursion work with constructors?
-        }
-        }
-    
+            }
     }
+    
+}
 
+    //print(Math.sin(3.14));
 //generateMap for origin forward and backward, at least renderDistance
 function makeMap(coord, direction){
     print("grid made");
@@ -55,6 +57,17 @@ function coordToHex(){
 }
 function HexPosition(){
     //this function cancels out movement, unless it is noneuclidean
+}
+function rotateDirection(direction, rotation = 1){
+    //positive rotation= change by sign, if abs>3, set to opposite sign 1
+    //negative rotation= change by inverse of sign, if 0, set to opposite sign 3
+    for(var i = 0; i<Math.abs(rotation);i++){
+        if(Math.sign(direction)=1){
+            direction = Math.abs(direction+Math.sign(direction))>3 ? -1*Math.sign(direction) : direction+Math.sign(direction);
+        }else{
+            direction = direction-Math.sign(direction)==0 ? -3*Math.sign(direction) : direction-Math.sign(direction);
+        }
+    }
 }
 function drawMap(){
     document.getElementById("gameGrid").innerHTML = ""; 
@@ -103,7 +116,13 @@ var gameloopID = setInterval(()=> {
     })
     //do user input
     if(shiftTimer<Date.now() && validKeys.includes(keypressed)){
-    shiftFaller(keypressed=="A" ? -1 : keypressed=="S" ? 0 : keypressed=="D" ? 1 : null);
+        //W forward, Q left, E right, S backward. A and D rotate.
+        if(["Q","W","E","S"].includes(keypressed)){
+            movePlayer(keypressed=="Q" ? rotateDirection(playerDirection,-1) : keypressed=="W" ? playerDirection : keypressed=="E" ? rotateDirection(playerDirection) : rotateDirection(playerDirection,3));
+        }else{
+            playerDirection = rotateDirection(playerDirection, keypressed=="A" ? -1 : 1);
+            drawMap();
+        }
     }
     keypressed = null;
 
