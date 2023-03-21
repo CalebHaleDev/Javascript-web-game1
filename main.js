@@ -22,6 +22,8 @@
     mapCoords = [];
     gameMap = [];
 
+
+
 class HexSquare {
     constructor(color, coords, playerCoords) {
         this.color = color;
@@ -69,8 +71,31 @@ function coordToHex(x, y){
     return result;
     //takes coordinates and returns a set of hex directions
 }
-function HexPosition(){
+function HexPosition(coordinates){
+    checkCoords = coordinates.slice(-1*renderDistance,-1);
+    checkCoords.push(coordinates[coordinates.length-1]);
+    for(var i = 1; i<4; i++){
+        
+        while(checkCoords.includes(i)&&checkCoords.includes(-1*i)){
+            checkCoords.find((value) => checkCoords.includes(-1*value)); //find the first value with a counterpart
+            checkCoords.indexOf(value from above);  //find where that value is
+            checkCoords.splice(index,1)   //splice returns the value spliced, which will then be used to splice it's counterpart, removing both
+            checkCoords.splice(checkCoords.indexOf(-1*value),1); 
+        }
+//similar to above, but must check for hexagonal diagonals
+        while(checkCoords.includes(i)&&checkCoords.includes(-1*i)){
+            checkCoords.find((value) => checkCoords.includes(-1*value)); //find the first value with a counterpart
+            checkCoords.indexOf(value from above);  //find where that value is
+            checkCoords.splice(index,1)   //splice returns the value spliced, which will then be used to splice it's counterpart, removing both
+            checkCoords.splice(checkCoords.indexOf(-1*value),1); 
+        }
+
+    }
     //this function cancels out movement, unless it is noneuclidean
+
+    //all movement within the last render distance which cancels itself out is removed
+    //negatives are their own complements, as well as 1, -2, 3 and -1, 2, -3 (three who sum to +-2 and all have different absolute values...)
+    return coordinates
 }
 function rotateDirection(direction, rotation = 1){
     //positive rotation= change by sign, if abs>3, set to opposite sign 1
