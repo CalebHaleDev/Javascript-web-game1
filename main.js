@@ -23,13 +23,15 @@
     gameMap = [];
 
 
-
 class HexSquare {
-    constructor(color, coords, playerCoords) {
-        this.color = color;
+    constructor(color, coords) {
+        this.groundColor = color;
         this.coords = coords;
         if(playerCoords.length()+renderDistance+1>coords.length){
             //make a new HexSquare... how does recursion work with constructors?
+            //create new HexSquare(this.color+-randomColorGradient, coords+this.coords[last]);      //for straight ahead
+            //run twice with different settings for left and right:
+            //create new HexSquare(average(this.color,grid space to the left/right))+-randomColorGradient, coords+rotateDirection(this.coords[last],+-2) )    //for veering left and right
             }
     }
     
@@ -97,17 +99,30 @@ var cancellingPair = [checkCoords.find((value) => checkCoords.includes(value-(5*
     resultArray = coordinates.slice(0, coordinates.length()-renderDistance);       //result=unchecked coordinates + checked
     return resultArray.splice(resultArray.length,0, [...checkCoords]);        //double check this later
 }
-function rotateDirection(direction, rotation = 1){
-    //positive rotation= change by sign, if abs>3, set to opposite sign 1
-    //negative rotation= change by inverse of sign, if 0, set to opposite sign 3
-    for(var i = 0; i<Math.abs(rotation);i++){
-        if(Math.sign(direction)=1){
-            direction = Math.abs(direction+Math.sign(direction))>3 ? -1*Math.sign(direction) : direction+Math.sign(direction);
-        }else{
-            direction = direction-Math.sign(direction)==0 ? -3*Math.sign(direction) : direction-Math.sign(direction);
-        }
+function rotateDirection(startingDirection, rotation){
+    if(rotation == undefined){
+        rotation = 1;
+    }else if (rotation == 3){
+        return -1*startingDirection;
     }
-    return direction;
+    position = startingDirection;
+
+    for(var i = 0; i<Math.abs(rotation);i++){
+        //rotate based on rotation direction (sign), but the values flip so "direction" direction must also be accounted for
+        position += Math.sign(position)*Math.sign(rotation);
+
+        if(position==0){
+            //too far counterclockwise, set to the opposite sign of the previous position, as a 3
+            position = -3*Math.sign(startingDirection);
+        }
+        if(Math.abs(position)==4){
+            //to far clockwise, set to the opposite sign of the previous position, as a 1
+            position = -1*Math.sign(startingDirection);
+        }
+//I've realized that since most uses of this will only be rotations of -1 or 1, a simplified switch statement could work for the exceptions (-3 or 3 + rotation = rotation of opposite sign)
+//review later to consider changing or optimizing
+    }
+    return position;
 }
 function drawMap(){
     document.getElementById("gameGrid").innerHTML = ""; 
