@@ -9,6 +9,16 @@
     const renderDistance = 10;
     const colorGradient = 5;
     //initialize game
+    class HexSquare {
+        constructor(coords, hue, playerCoords) {
+            this.coords = coords;
+            this.groundColor = hue;
+            //if(playerCoords.length()+renderDistance+1>coords.length){
+                //make a new HexSquare... how does recursion work with constructors?
+            //    }
+        }
+        
+    }
     var score = 0;
     const validKeys = ["Q","W","E","A","S","D"];
     var playerCoords = [];
@@ -19,34 +29,52 @@
     //const pi = 3.14159265     //for possible use in shortening the rotateDirection function
     //coordinates are +=1,0 and +-.5, +-hex
     const hex = Math.sqrt(3)/3;
-    mapCoords = [];
-    gameMap = [];
+    //mapCoords = [];
+    gameMap = [new HexSquare(playerCoords, 36, playerCoords)];
 
+//test starting gridspace
+print(gameMap);
 
-class HexSquare {
-    constructor(color, coords) {
-        this.groundColor = color;
-        this.coords = coords;
-        if(playerCoords.length()+renderDistance+1>coords.length){
-            //make a new HexSquare... how does recursion work with constructors?
-            //create new HexSquare(this.color+-randomColorGradient, coords+this.coords[last]);      //for straight ahead
-            //run twice with different settings for left and right:
-            //create new HexSquare(average(this.color,grid space to the left/right))+-randomColorGradient, coords+rotateDirection(this.coords[last],+-2) )    //for veering left and right
-            }
-    }
-    
+//test passing editted arrays
+function test(array){
+    print(array);
 }
+
+var arr = [1, 2, 3, 4];
+test([...arr]);     //does [].splice() work?
+print(arr);
+
+//test coordToHex
+for(var i=-3; i<4; i++){
+    for(var j=-3; j<4; j++){
+        print(i+","+j+" is: "+coordToHex(i, j)+"<br>");
+    }
+}
+
+
+
 
 //generateMap for origin forward and backward, at least renderDistance
-function makeMap(coord, direction){
-    print("grid made");
-    //if this grid doesn't exist, make a new one at this spot
-    //if this grid doesn't exist, recursively call the function from here;
-        //in the same direction from the parent drawing from the parent
-        //a little left from the parent drawing from the parent's left (if generated)
-        //and a little right from the parent, drawing from the parent's right (if generated)
+function makeMapFrom(coord, sourceDirection){
+    print("grid space making");
+    if(Math.abs(coord.length-playerCoords.length)>renderDistance+2){  //if too far out of render distance, stop
+        return;
+    }
+
+    gridSpace = gameMap.find((value) => value.coords == coord);
+    if(gridSpace==undefined){       //if this grid doesn't exist, make a new one at this spot
+        //alternatively, could find parent coords and neighbors and average the color of all existing data (for grid spaces that exist)
+        //parentColor = gameMap.find((square) => square.coords==coord.slice(0,coord.length-1)).groundColor;
+        //gameMap.push(new HexSquare(coord, parentcolor+-gradient, playerCoords))
+
+    }else{      //if this grid does exist, recursively call the function from here, repeated where direction is forward, rotated -1 and 1
+        makeMapFrom(coord.push(coord.slice(-1)[0]));   //forward should be last direction travelled
+        makeMapFrom(coord.push(rotateDirection(coord.slice(-1)[0]),1));
+        makeMapFrom(coord.push(rotateDirection(coord.slice(-1)[0]),-1));   //the pushing will change the coordinates, this can only happen with adjustments from the same starting point
+    }
 }
-function generateMap(){
+function generateMapFrom(coords){
+    print("grid generated");
     //loop makeMap x times, for x steps/layers of recursive generation
 }
 function print(printText){
@@ -145,22 +173,26 @@ function drawMap(){
             //so, relative to the player, all gridspots would be drawn X: (threes)-(-threes) + Math.Sqrt(3)*hex*((twos)-(-twos)) , Y: hex*[(twos)-(-twos)-(threes)+(-threes)] + 2*hex*((ones)-(-ones))
         }
     }
+    //also, above, if the block is render distance away from the player, call makeMapFrom(that position)
     print("score: "+score+`<br>`);
 }
 function levelSetup(){
-    generateMap();
+    makeMapFrom([]);      //double check
     drawMap();
     shiftTimer=Date.now()+(1000*level/20);
 }
 function movePlayer(direction){
     print("moving: "+direction);
-    let newLocation = HexPosition(playerCoords + direction)
-    if(newLocation==empty){
+    let newLocation = HexPosition(playerCoords.push(direction));
+    if(newLocation==empty){ //pseudocode
         playerCoords = newLocation;
+        makeMapFrom(playerCoords);
+        drawMap();
     }
-    drawMap();
+
     shiftTimer=Date.now()+500;
 }
+
 
     levelSetup(1,5);
 //main game loop
