@@ -12,17 +12,13 @@
         
     }
     var score = 0;
-    var playerCoords = [];
     var playerDirection = 1;
     const playerSize = 1;
     var lightPower = 5;
     const maxLightPower = 15;
     //coordinates are +=1,0 and +-.5, +-hex
     const hex = Math.sqrt(3)/3;
-    gameMap = [new HexSquare(playerCoords, 36, playerCoords)];
 
-//test starting gridspace
-print(gameMap);
 
 //test passing editted arrays
 function test(array){
@@ -60,9 +56,7 @@ function makeMapFrom(coord, sourceDirection){
         makeMapFrom(coord.push(rotateDirection(coord.slice(-1)[0]),-1));   //the pushing will change the coordinates, this can only happen with adjustments from the same starting point
     }
 }
-function print(printText){
-    document.getElementById("textDisplay").innerHTML += printText;
-}
+
 function draw(drawing){
     document.getElementById("gameGrid").innerHTML += drawing;
 }
