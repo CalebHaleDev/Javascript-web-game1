@@ -1,5 +1,5 @@
-const renderDistance = 5;
-const resolution = .25;
+const renderDistance = 7;
+const resolution = .5;
 gameMap = {};
 gameMap[0,0] = 50;
 const colorGradient = 30;
@@ -7,7 +7,7 @@ playerInfo = {
     x: 0,
     y: 0,
     direction: undefined,   //how should I do this?
-    brightness: 2
+    brightness: 2.5
 };
 
 function print(printText){
@@ -17,11 +17,13 @@ function randomUpTo(range){
     return Math.floor((range+1)*Math.random());
 }
 function drawMap(){
+    document.getElementById("gameGrid").innerHTML += `<rect x="0" y="0" width="`+2*renderDistance+`" height="`+2*renderDistance+`" stroke="none" stroke-width="3" fill="hsla(0, 10%, 0%, 1)">`;
     //drawPixel(x, y, width, hue, lightLevel);
     for(var x = -1*renderDistance; x<renderDistance; x+=resolution){
         for(var y = -1*renderDistance; y<renderDistance; y+=resolution){
             if(gameMap[x+playerInfo.x, y+playerInfo.y]!=undefined){
-                drawPixel(x+renderDistance, y+renderDistance, resolution, gameMap[x+playerInfo.x, y+playerInfo.y], Math.min(Math.max(Math.sqrt(x**2+y**2)/playerInfo.brightness, 0), 1));
+                //print("drawing "+x+","+y+" at "+(x+playerInfo.x)+","+(y+playerInfo.y))
+                drawPixel(x+renderDistance, y+renderDistance, resolution, gameMap[x+playerInfo.x, y+playerInfo.y], Math.min(Math.max(playerInfo.brightness/Math.sqrt(x**2+y**2), 0), 1));
             }else{
                 //print(x+","+y+" not found<br>");
             }
@@ -62,7 +64,11 @@ function createCoordinate(x,y){
     //print(x+","+y+" is now: "+gameMap[x,y]+"<br>");
     }
 }
-
+function movePlayer(coords){
+    playerInfo.x += coords[0];
+    playerInfo.y += coords[1];
+    moveTimer=Date.now()+(250);
+}
 
 
 makeMap();
@@ -70,21 +76,20 @@ drawMap();
 
 
 var moveTimer=Date.now()+(250);
+var keypressed=null;
 
 //main game loop
 var gameloopID = setInterval(()=> {
     //get user input
     this.addEventListener('keypress', event => {
-        var keypressed = event.code[3];
+        keypressed = event.code[3];
+        //print(moveTimer<Date.now() && ["W","A","S","D"].includes(keypressed));
     })
     //do user input
-    if(moveTimer<Date.now() && ["Q","W","E","A","S","D"].includes(keypressed)){
-        if(["Q","W","E","A","S","D"].includes(keypressed)){
-           //movePlayer(keypressed=="Q" ? rotateDirection(playerDirection,-1) : keypressed=="W" ? playerDirection : keypressed=="E" ? rotateDirection(playerDirection) : rotateDirection(playerDirection,3));
-        }else{
-            //playerDirection = rotateDirection(playerDirection, keypressed=="A" ? -1 : 1);
-            drawMap();
-        }
+    if(moveTimer<Date.now() && ["W","A","S","D"].includes(keypressed)){
+        //print(keypressed+" pressed");
+        movePlayer(keypressed=="W" ? (0,1) : keypressed=="A" ? (-1,0) : keypressed=="S" ? (0, -1) : (1,0));
+        drawMap();
     }
     keypressed = null;
 
