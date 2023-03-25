@@ -16,28 +16,20 @@ function print(printText){
 function randomUpTo(range){
     return Math.floor((range+1)*Math.random());
 }
-function drawDot(x, y, radius, hue, lightLevel){
-    document.getElementById("gameGrid").innerHTML += `<circle cx="`+x+`" cy="`+y+`" r="`+radius+`" stroke="none" stroke-width="3" fill="hsla(`+hue+`, 34%, 25%, `+lightLevel+`)">`;
-}
 function drawMap(){
-    //drawDot(x, y, radius, hue, lightLevel);
+    //drawPixel(x, y, width, hue, lightLevel);
     for(var x = -1*renderDistance; x<renderDistance; x+=resolution){
         for(var y = -1*renderDistance; y<renderDistance; y+=resolution){
-            //print("looking up "+x+","+y+"<br>");
             if(gameMap[x+playerInfo.x, y+playerInfo.y]!=undefined){
-                //print("drawing "+x+","+y+" at "+(x+renderDistance)+","+(y+renderDistance));
-                drawDot(x+renderDistance, y+renderDistance, resolution/2, gameMap[x+playerInfo.x, y+playerInfo.y], Math.min(Math.max(Math.sqrt(x**2+y**2)/playerInfo.brightness, 0), 1));
+                drawPixel(x+renderDistance, y+renderDistance, resolution, gameMap[x+playerInfo.x, y+playerInfo.y], Math.min(Math.max(Math.sqrt(x**2+y**2)/playerInfo.brightness, 0), 1));
             }else{
                 //print(x+","+y+" not found<br>");
             }
         }
     }
-    print("done drawing");
 }
-function drawPixel(){
-    document.getElementById("gameGrid").innerHTML += `<circle cx="`+x+`" cy="`+y+`" r="`+radius+`" stroke="none" stroke-width="3" fill="hsla(`+hue+`, 34%, 25%, `+lightLevel+`)">`;
-
-    
+function drawPixel(x, y, length, hue, opacity){
+    document.getElementById("gameGrid").innerHTML += `<rect x="`+x+`" y="`+y+`" width="`+length+`" height="`+length+`" stroke="none" stroke-width="3" fill="hsla(`+hue+`, 34%, 25%, `+opacity+`)">`;
 }
 function makeMap(){
     for(var radius=2*resolution; radius<renderDistance; radius+=2*resolution){
@@ -73,8 +65,8 @@ function createCoordinate(x,y){
 
 
 
-//makeMap();
-//drawMap();
+makeMap();
+drawMap();
 
 
 var moveTimer=Date.now()+(250);
