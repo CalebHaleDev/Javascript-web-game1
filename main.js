@@ -14,10 +14,8 @@
     var score = 0;
     var playerDirection = 1;
     const playerSize = 1;
-    var lightPower = 5;
-    const maxLightPower = 15;
-    //coordinates are +=1,0 and +-.5, +-hex
-    const hex = Math.sqrt(3)/3;
+
+
 
 
 //test passing editted arrays
@@ -45,7 +43,7 @@ function makeMapFrom(coord, sourceDirection){
         return;
     }
 
-    gridSpace = gameMap.find((value) => value.coords == coord);
+    var gridSpace = gameMap.find((value) => value.coords == coord);
     if(gridSpace==undefined){       //if  doesn't exist, make a new one here
         //parentColor = gameMap.find((square) => square.coords==coord.slice(0,coord.length-1)).groundColor;
         //gameMap.push(new HexSquare(coord, parentcolor+-gradient, playerCoords))
@@ -57,9 +55,7 @@ function makeMapFrom(coord, sourceDirection){
     }
 }
 
-function draw(drawing){
-    document.getElementById("gameGrid").innerHTML += drawing;
-}
+
 function coordToHex(x, y){
     //takes coordinates and returns a set of hex directions
     result = [];
@@ -129,13 +125,7 @@ function rotateDirection(startingDirection, rotation){
     return position;
 }
 function drawMap(){
-    document.getElementById("gameGrid").innerHTML = ""; 
-    draw(`<polygon points="0,0 50,25 5,100 0,25" fill="hsla(360, 34%, 45%, .9)" stroke="black" />`);   //test shape
-    //for each grid space, lookup the player coordinates, plus the difference in movement, (processed in hexForm), to find the square
-    //coordinates within render distance, coordToHex, draw them
-    hue = 36
-    draw(`<polygon points="-.5,${hex} .5,${hex} 1,0 .5,-${hex} -.5,-${hex} -1,0" fill="hsla(${hue}, 34%, 45%, ${lightPower/maxLightPower})" stroke="white" />`);    //test
-
+    
     for(var i = -renderDistance; i<renderDistance; i++){
         for(var j = -renderDistance; j<renderDistance; j++){
             //draw playerCoords + coordToHex() in their correct rotated positions
