@@ -1,4 +1,5 @@
-const renderDistance = 3;
+const renderDistance = 5;
+const resolution = .25;
 gameMap = {};
 gameMap[0,0] = 50;
 const colorGradient = 30;
@@ -6,7 +7,7 @@ playerInfo = {
     x: 0,
     y: 0,
     direction: undefined,   //how should I do this?
-    brightness: 3
+    brightness: 2
 };
 
 function print(printText){
@@ -20,12 +21,12 @@ function drawDot(x, y, radius, hue, lightLevel){
 }
 function drawMap(){
     //drawDot(x, y, radius, hue, lightLevel);
-    for(var x = -1*renderDistance; x<renderDistance; x+=.5){
-        for(var y = -1*renderDistance; y<renderDistance; y+=.5){
+    for(var x = -1*renderDistance; x<renderDistance; x+=resolution){
+        for(var y = -1*renderDistance; y<renderDistance; y+=resolution){
             //print("looking up "+x+","+y+"<br>");
             if(gameMap[x+playerInfo.x, y+playerInfo.y]!=undefined){
                 //print("drawing "+x+","+y+" at "+(x+renderDistance)+","+(y+renderDistance));
-                drawDot(x+renderDistance, y+renderDistance, .25, gameMap[x+playerInfo.x, y+playerInfo.y], Math.min(Math.max(Math.sqrt(x**2+y**2)/playerInfo.brightness, 0), 1));
+                drawDot(x+renderDistance, y+renderDistance, resolution/2, gameMap[x+playerInfo.x, y+playerInfo.y], Math.min(Math.max(Math.sqrt(x**2+y**2)/playerInfo.brightness, 0), 1));
             }else{
                 //print(x+","+y+" not found<br>");
             }
@@ -33,15 +34,20 @@ function drawMap(){
     }
     print("done drawing");
 }
+function drawPixel(){
+    document.getElementById("gameGrid").innerHTML += `<circle cx="`+x+`" cy="`+y+`" r="`+radius+`" stroke="none" stroke-width="3" fill="hsla(`+hue+`, 34%, 25%, `+lightLevel+`)">`;
+
+    
+}
 function makeMap(){
-    for(var radius=1;radius<renderDistance;radius++){
+    for(var radius=2*resolution; radius<renderDistance; radius+=2*resolution){
         //print("making radius: "+radius+"<br>");
         makeMapLayer(radius);
         //print("<br><br>");
     }
 }
 function makeMapLayer(diamondRadius){
-    for(var i=diamondRadius;i>-.1;i-=.5){
+    for(var i=diamondRadius;i>-.01;i-=resolution){
         //print("making radius with i: "+i+"......................");
         createCoordinate(diamondRadius-i,i);
         createCoordinate(diamondRadius-i,-1*i);
@@ -54,21 +60,21 @@ function createCoordinate(x,y){
         //if on an axis, draw from the axis
         if(x*y==0){
             if(x==0){
-                gameMap[x,y] = (gameMap[0, y-Math.sign(y)]+randomUpTo(colorGradient))%360;
+                gameMap[x,y] = (gameMap[0, y-2*resolution*Math.sign(y)]+randomUpTo(colorGradient))%360;
             }else{
-                gameMap[x,y] = (gameMap[x-Math.sign(x), y]+randomUpTo(colorGradient))%360;
+                gameMap[x,y] = (gameMap[x-2*resolution*Math.sign(x), y]+randomUpTo(colorGradient))%360;
             }
         }else{      //if not, draw from diagonally away (or average of lower spots?)
-            gameMap[x,y] = (gameMap[x-.5*Math.sign(x), y-.5*Math.sign(y)]+randomUpTo(colorGradient))%360;
+            gameMap[x,y] = (gameMap[x-resolution*Math.sign(x), y-resolution*Math.sign(y)]+randomUpTo(colorGradient))%360;
         }
-    print(x+","+y+" is now: "+gameMap[x,y]+"<br>");
+    //print(x+","+y+" is now: "+gameMap[x,y]+"<br>");
     }
 }
 
 
 
-makeMap();
-drawMap();
+//makeMap();
+//drawMap();
 
 
 var moveTimer=Date.now()+(250);
