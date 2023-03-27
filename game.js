@@ -1,4 +1,4 @@
-const renderDistance = 7;
+const renderDistance = 5;
 const resolution = .5;
 gameMap = {};
 gameMap[0,0] = 50;
@@ -64,9 +64,11 @@ function createCoordinate(x,y){
     //print(x+","+y+" is now: "+gameMap[x,y]+"<br>");
     }
 }
-function movePlayer(coords){
-    playerInfo.x += coords[0];
-    playerInfo.y += coords[1];
+function movePlayer(x, y){
+    print("moving: "+x+","+y);
+    playerInfo.x += x;
+    playerInfo.y += y;
+    print(playerInfo.x+","+playerInfo.y)
     moveTimer=Date.now()+(250);
 }
 
@@ -88,12 +90,12 @@ var gameloopID = setInterval(()=> {
     //do user input
     if(moveTimer<Date.now() && ["W","A","S","D"].includes(keypressed)){
         //print(keypressed+" pressed");
-        movePlayer(keypressed=="W" ? (0,1) : keypressed=="A" ? (-1,0) : keypressed=="S" ? (0, -1) : (1,0));
+        movePlayer(keypressed=="W" ? 0 : keypressed=="A" ? -1 : keypressed=="S" ? 0 : 1 , keypressed=="W" ? 1 : keypressed=="A" ? 0 : keypressed=="S" ? -1 : 0);
         drawMap();
     }
     keypressed = null;
 
-    if(false){    //end game condition
+    if(Date.now()-moveTimer>30000){    //end game condition
         clearInterval(gameloopID);
     }
 },100); //refresh rate
