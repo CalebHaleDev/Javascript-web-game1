@@ -10,14 +10,14 @@ I used Visual Studio Code and an extension that allows hosting html files privat
 
 # Useful Websites
 
-[JavaScript Tutorial](https://www.youtube.com/watch?v=PkZNo7MFNFg&t=18s)
-[HTML DOM info W3schools](https://www.w3schools.com/js/js_htmldom.asp)
-[DOM methods W3schools](https://www.w3schools.com/js/js_htmldom_document.asp)
-[SVG reference for drawing](https://developer.mozilla.org/en-US/docs/Web/SVG)
-[SVG reference for polygon](https://developer.mozilla.org/en-US/docs/Web/SVG/Element/polygon)
-[array.slice W3schools](https://www.w3schools.com/jsref/tryit.asp?filename=tryjsref_slice_array2)
-[array splice](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/splice)
-[HSLA color selector for design] (hslpicker.com/)
+- [JavaScript Tutorial](https://www.youtube.com/watch?v=PkZNo7MFNFg&t=18s)
+- [HTML DOM info W3schools](https://www.w3schools.com/js/js_htmldom.asp)
+- [DOM methods W3schools](https://www.w3schools.com/js/js_htmldom_document.asp)
+- [SVG reference for drawing](https://developer.mozilla.org/en-US/docs/Web/SVG)
+- [SVG reference for polygon](https://developer.mozilla.org/en-US/docs/Web/SVG/Element/polygon)
+- [array.slice W3schools](https://www.w3schools.com/jsref/tryit.asp?filename=tryjsref_slice_array2)
+- [array splice](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/splice)
+- [HSLA color selector for design] (hslpicker.com/)
 
 # Future Work
 
