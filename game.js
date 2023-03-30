@@ -41,7 +41,7 @@ function makeMap(){
     }
 }
 function makeMapLayer(diamondRadius){
-    for(var i=diamondRadius;i>-.01;i-=resolution){
+    for(var i=diamondRadius;i>-.01;i-=resolution){      //2* should leave only integer locations on .5  resolution, but removes rows...
         //print("making radius with i: "+i+"......................");
         createCoordinate(diamondRadius-i,i);
         createCoordinate(diamondRadius-i,-1*i);
@@ -59,7 +59,7 @@ function createCoordinate(x,y){
                 gameMap[x,y] = (gameMap[x-2*resolution*Math.sign(x), 0]+randomUpTo(colorGradient))%360;
             }
         }else{      //if not, draw from diagonally away (or average of lower spots?)
-            gameMap[x,y] = (gameMap[x-resolution*Math.sign(x), y-resolution*Math.sign(y)]+randomUpTo(colorGradient)+(10*x*resolution))%360;
+            gameMap[x,y] = (gameMap[x-resolution*Math.sign(x), y-resolution*Math.sign(y)]+randomUpTo(colorGradient)+(20*x*resolution))%360;
         }
     //print(x+","+y+" is now: "+gameMap[x,y]+"<br>");
     }
