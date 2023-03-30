@@ -23,7 +23,7 @@ function drawMap(){
         for(var y = -1*renderDistance; y<renderDistance; y+=resolution){
             if(gameMap[x+playerInfo.x, y+playerInfo.y]!=undefined){
                 //print("drawing "+x+","+y+" at "+(x+playerInfo.x)+","+(y+playerInfo.y))
-                drawPixel(x+renderDistance, y+renderDistance, resolution, gameMap[x+playerInfo.x, y+playerInfo.y], Math.min(Math.max(playerInfo.brightness/Math.sqrt(x**2+y**2), 0), 1));
+                drawPixel(x+renderDistance, y+renderDistance, resolution, gameMap[x+playerInfo.x, y-playerInfo.y], Math.min(Math.max(playerInfo.brightness/Math.sqrt(x**2+y**2), 0), 1));
             }else{
                 //print(x+","+y+" not found<br>");
             }
@@ -56,10 +56,10 @@ function createCoordinate(x,y){
             if(x==0){
                 gameMap[x,y] = (gameMap[0, y-2*resolution*Math.sign(y)]+randomUpTo(colorGradient))%360;
             }else{
-                gameMap[x,y] = (gameMap[x-2*resolution*Math.sign(x), y]+randomUpTo(colorGradient))%360;
+                gameMap[x,y] = (gameMap[x-2*resolution*Math.sign(x), 0]+randomUpTo(colorGradient))%360;
             }
         }else{      //if not, draw from diagonally away (or average of lower spots?)
-            gameMap[x,y] = (gameMap[x-resolution*Math.sign(x), y-resolution*Math.sign(y)]+randomUpTo(colorGradient))%360;
+            gameMap[x,y] = (gameMap[x-resolution*Math.sign(x), y-resolution*Math.sign(y)]+randomUpTo(colorGradient)+(10*x*resolution))%360;
         }
     //print(x+","+y+" is now: "+gameMap[x,y]+"<br>");
     }
@@ -68,7 +68,7 @@ function movePlayer(x, y){
     print("moving: "+x+","+y);
     playerInfo.x += x;
     playerInfo.y += y;
-    print(playerInfo.x+","+playerInfo.y)
+    print("moved to "+playerInfo.x+","+playerInfo.y)
     moveTimer=Date.now()+(250);
 }
 
@@ -95,7 +95,7 @@ var gameloopID = setInterval(()=> {
     }
     keypressed = null;
 
-    if(Date.now()-moveTimer>30000){    //end game condition
+    if(false/*Date.now()-moveTimer>30000*/){    //end game condition
         clearInterval(gameloopID);
     }
 },100); //refresh rate
