@@ -17,7 +17,7 @@ I used Visual Studio Code and an extension that allows hosting html files privat
 - [SVG reference for polygon](https://developer.mozilla.org/en-US/docs/Web/SVG/Element/polygon)
 - [array.slice W3schools](https://www.w3schools.com/jsref/tryit.asp?filename=tryjsref_slice_array2)
 - [array splice](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/splice)
-- [HSLA color selector for design] (hslpicker.com/)
+- [HSLA color selector for design](hslpicker.com/)
 
 # Future Work
 
