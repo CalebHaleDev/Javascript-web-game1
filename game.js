@@ -19,11 +19,16 @@ function randomUpTo(range){
 function drawMap(){
     document.getElementById("gameGrid").innerHTML += `<rect x="0" y="0" width="`+2*renderDistance+`" height="`+2*renderDistance+`" stroke="none" stroke-width="3" fill="hsla(0, 10%, 0%, 1)">`;
     //drawPixel(x, y, width, hue, lightLevel);
-    for(var x = -1*renderDistance; x<renderDistance; x+=resolution){
-        for(var y = -1*renderDistance; y<renderDistance; y+=resolution){
-            if(gameMap[x+playerInfo.x, y+playerInfo.y]!=undefined){
+    for(var relativeX = -1*renderDistance; relativeX<renderDistance; relativeX+=resolution){
+        for(var relativeY = -1*renderDistance; relativeY<renderDistance; relativeY+=resolution){
+            if(gameMap[relativeX+playerInfo.x, relativeY+playerInfo.y]!=undefined){
                 //print("drawing "+x+","+y+" at "+(x+playerInfo.x)+","+(y+playerInfo.y))
-                drawPixel(x+renderDistance, y+renderDistance, resolution, gameMap[x+playerInfo.x, y-playerInfo.y], Math.min(Math.max(playerInfo.brightness/Math.sqrt(x**2+y**2), 0), 1));
+                var plotX = relativeX + renderDistance; // for plots, add renderdistance to x to get the correct plotting coordinant
+                var plotY = -1*(relativeY - renderDistance); // for plots, add renderdistance to y to get the correct plotting coordinant
+                var gameMapX = relativeX + playerInfo.x;
+                var gameMapY = relativeY + playerInfo.y;  
+                //print("("+plotX+","+plotY+", "+gameMapX+","+gameMapY+")");
+                drawPixel(plotX, plotY, resolution, gameMap[gameMapX, gameMapY], Math.min(Math.max(playerInfo.brightness/Math.sqrt(x**2+y**2), 0), 1));
             }else{
                 //print(x+","+y+" not found<br>");
             }
